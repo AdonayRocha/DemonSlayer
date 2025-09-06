@@ -1,7 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, ActivityIndicator, Dimensions, Platform } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../App';
+import { COLORS } from '../colors';
 
 type DetailRouteProp = RouteProp<RootStackParamList, 'CharacterDetail'>;
 
@@ -32,13 +34,15 @@ export default function CharacterDetailScreen() {
             .finally(() => setLoading(false));
     }, [id]);
 
+
     if (loading) {
-        return <ActivityIndicator size="large" color="#d32f2f" style={{ flex: 1 }} />;
+    return <ActivityIndicator size="large" color={COLORS.primary} style={{ flex: 1 }} />;
     }
 
     if (!character) {
         return <Text style={{ flex: 1, textAlign: 'center', marginTop: 40 }}>Personagem não encontrado.</Text>;
     }
+
 
     const background =
         character.race === 'Demon'
@@ -62,7 +66,7 @@ export default function CharacterDetailScreen() {
                         </View>
                         <View style={styles.chip}>
                             <Text style={styles.chipLabel}>Raça: </Text>
-                            <Text style={[styles.chipValue, { color: '#d32f2f' }]}>{character.race}</Text>
+                            <Text style={[styles.chipValue, { color: COLORS.primary }]}>{character.race}</Text>
                         </View>
                         <View style={styles.chip}>
                             <Text style={styles.chipLabel}>Gênero: </Text>
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
     },
     card: {
         width: cardWidth,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.primaryBranco,
         borderTopLeftRadius: 18,
         borderTopRightRadius: 18,
         borderBottomLeftRadius: 36,
@@ -143,7 +147,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     chip: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: COLORS.chipBg,
         borderRadius: 10,
         flexDirection: 'row',
         alignItems: 'center',
@@ -152,22 +156,22 @@ const styles = StyleSheet.create({
         marginHorizontal: 2,
         marginVertical: 2,
     },
-    chipLabel: { fontSize: 13, fontWeight: '500', color: '#444' },
-    chipValue: { fontSize: 13, fontWeight: 'bold', color: '#222' },
+    chipLabel: { fontSize: 13, fontWeight: '500', color: COLORS.chipLabel },
+    chipValue: { fontSize: 13, fontWeight: 'bold', color: COLORS.chipValue },
     description: {
         fontSize: 16,
         textAlign: 'center',
         marginVertical: 14,
-        color: '#222',
+        color: COLORS.chipValue,
         zIndex: 1,
     },
     quoteBox: {
-        backgroundColor: '#111',
+        backgroundColor: COLORS.quoteBg,
         padding: 12,
         borderRadius: 10,
         marginTop: 6,
         width: '100%',
         zIndex: 1,
     },
-    quote: { color: '#fff', fontStyle: 'italic', textAlign: 'center', fontSize: 15 },
+    quote: { color: COLORS.primaryBranco, fontStyle: 'italic', textAlign: 'center', fontSize: 15 },
 });

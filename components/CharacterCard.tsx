@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
+import { COLORS } from '../colors';
 
 interface CharacterCardProps {
     name: string;
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
     card: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#eee',
+        backgroundColor: COLORS.cardListBg,
         borderRadius: 12,
         marginVertical: 8,
         padding: 16,

@@ -3,6 +3,7 @@ import { View, Text, Image, FlatList, ActivityIndicator, StyleSheet, TouchableOp
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../App';
+import { COLORS } from '../colors';
 
 interface Character {
     id: number;
@@ -32,7 +33,7 @@ export default function CharacterListScreen() {
             <Image source={require('../assets/logo.png')} style={styles.logo} />
             <Text style={styles.title}>Escolha seu personagem abaixo</Text>
             {loading ? (
-                <ActivityIndicator size="large" color="#d32f2f" style={{ marginTop: 30 }} />
+                <ActivityIndicator size="large" color={COLORS.primary} style={{ marginTop: 30 }} />
             ) : (
                 <FlatList
                     data={characters}
@@ -55,13 +56,13 @@ export default function CharacterListScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff', alignItems: 'center' },
+    container: { flex: 1, backgroundColor: COLORS.primaryBranco, alignItems: 'center' },
     logo: { width: 200, height: 200, resizeMode: 'contain', marginTop: 18 },
     title: { fontSize: 18, marginBottom: 8 },
     card: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#eeeeee',
+        backgroundColor: COLORS.cardListBg,
         borderRadius: 12,
         marginVertical: 8,
         padding: 16,
