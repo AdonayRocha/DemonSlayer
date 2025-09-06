@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, Image, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../App';
 import { useNavigation } from '@react-navigation/native';
-import CharacterCard from '../components/CharacterCard';
+import { RootStackParamList } from '../App';
 
 interface Character {
-    id: string;
+    id: number;
     name: string;
     img: string;
 }
@@ -21,7 +20,10 @@ export default function CharacterListScreen() {
     useEffect(() => {
         fetch('https://www.demonslayer-api.com/api/v1/characters?limit=45')
             .then(res => res.json())
-            .then(data => setCharacters(data))
+            .then((data) => {
+                setCharacters(data.content);
+            })
+            .catch(() => setCharacters([]))
             .finally(() => setLoading(false));
     }, []);
 
@@ -30,17 +32,21 @@ export default function CharacterListScreen() {
             <Image source={require('../assets/logo.png')} style={styles.logo} />
             <Text style={styles.title}>Escolha seu personagem abaixo</Text>
             {loading ? (
-                <ActivityIndicator size="large" color="#d32f2f" />
+                <ActivityIndicator size="large" color="#d32f2f" style={{ marginTop: 30 }} />
             ) : (
                 <FlatList
                     data={characters}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => String(item.id)}
+                    style={{ width: '100%' }}
+                    contentContainerStyle={{ paddingBottom: 30 }}
                     renderItem={({ item }) => (
-                        <CharacterCard
-                            name={item.name}
-                            img={item.img}
-                            onPress={() => navigation.navigate('CharacterDetail', { id: item.id })}
-                        />
+                        <TouchableOpacity
+                            style={styles.card}
+                            onPress={() => navigation.navigate('CharacterDetail', { id: String(item.id) })}
+                        >
+                            <Image source={{ uri: item.img }} style={styles.img} />
+                            <Text style={styles.name}>{item.name}</Text>
+                        </TouchableOpacity>
                     )}
                 />
             )}
@@ -52,4 +58,15 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff', alignItems: 'center' },
     logo: { width: 200, height: 200, resizeMode: 'contain', marginTop: 18 },
     title: { fontSize: 18, marginBottom: 8 },
+    card: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#eeeeee',
+        borderRadius: 12,
+        marginVertical: 8,
+        padding: 16,
+        marginHorizontal: 18,
+    },
+    img: { width: 64, height: 64, marginRight: 20, resizeMode: 'contain' },
+    name: { fontSize: 20, fontWeight: 'bold' },
 });
