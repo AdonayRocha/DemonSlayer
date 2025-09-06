@@ -53,6 +53,7 @@ export default function CharacterDetailScreen() {
                     <View style={styles.imageWrapper}>
                         <Image source={{ uri: character.img }} style={styles.img} />
                     </View>
+                    <View style={{ height: 38 }} />
                     <Text style={styles.name}>{character.name}</Text>
                     <View style={styles.chipRow}>
                         <View style={styles.chip}>
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 36,
         borderBottomRightRadius: 36,
         alignItems: 'center',
-        paddingTop: 120,
+        paddingTop: 70, // reduzido para diminuir a área branca
         paddingBottom: 32,
         paddingHorizontal: 16,
         minHeight: windowHeight * 0.72,
@@ -112,15 +113,15 @@ const styles = StyleSheet.create({
     },
     imageWrapper: {
         position: 'absolute',
-        top: -90,
+        top: -70, // sobe um pouco a imagem
         left: 0,
         right: 0,
         alignItems: 'center',
         zIndex: 2,
     },
     img: {
-        width: 200,
-        height: 240,
+        width: 180,
+        height: 200, // diminui um pouco a imagem
         resizeMode: 'contain',
     },
     name: {
