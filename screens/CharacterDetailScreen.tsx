@@ -21,28 +21,54 @@ interface Character {
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
+
 export default function CharacterDetailScreen() {
     const route = useRoute<DetailRouteProp>();
     const { id } = route.params;
     const [character, setCharacter] = useState<Character | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        setLoading(true);
+        setError(null);
         fetch(`https://www.demonslayer-api.com/api/v1/characters?id=${id}`)
-            .then(res => res.json())
-            .then(data => setCharacter(data.content[0]))
+            .then(res => {
+                if (!res.ok) throw new Error('Erro ao buscar personagem');
+                return res.json();
+            })
+            .then(data => {
+                if (!data.content || !data.content[0]) {
+                    setCharacter(null);
+                    setError('Personagem não encontrado. Tente novamente mais tarde.');
+                } else {
+                    setCharacter(data.content[0]);
+                }
+            })
+            .catch(() => {
+                setCharacter(null);
+                setError('Não foi possível carregar os dados. Tente novamente mais tarde.');
+            })
             .finally(() => setLoading(false));
     }, [id]);
 
-
     if (loading) {
-    return <ActivityIndicator size="large" color={COLORS.primary} style={{ flex: 1 }} />;
+        return <ActivityIndicator size="large" color={COLORS.primary} style={{ flex: 1 }} />;
     }
+
+    if (error) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+                <Text style={{ textAlign: 'center', color: COLORS.primary, fontWeight: 'bold', fontSize: 18, marginBottom: 8 }}>{error}</Text>
+            </View>
+        );
+    }
+
+
 
     if (!character) {
-        return <Text style={{ flex: 1, textAlign: 'center', marginTop: 40 }}>Personagem não encontrado.</Text>;
+        return null;
     }
-
 
     const background =
         character.race === 'Demon'
@@ -102,7 +128,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 36,
         borderBottomRightRadius: 36,
         alignItems: 'center',
-        paddingTop: 70, // reduzido para diminuir a área branca
+        paddingTop: 70, 
         paddingBottom: 32,
         paddingHorizontal: 16,
         minHeight: windowHeight * 0.72,
@@ -117,7 +143,7 @@ const styles = StyleSheet.create({
     },
     imageWrapper: {
         position: 'absolute',
-        top: -70, // sobe um pouco a imagem
+        top: -70, 
         left: 0,
         right: 0,
         alignItems: 'center',
@@ -125,7 +151,7 @@ const styles = StyleSheet.create({
     },
     img: {
         width: 180,
-        height: 200, // diminui um pouco a imagem
+        height: 200, 
         resizeMode: 'contain',
     },
     name: {
